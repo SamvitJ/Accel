@@ -136,21 +136,23 @@ def main():
     pprint.pprint(config)
     config.symbol = 'resnet_v1_101_flownet_deeplab'
     model1 = '/../model/rfcn_dff_flownet_vid'
-    model2 = '/../model/trained/accel-18s-0053'
-    # model2 = '/../output/dff_deeplab/cityscapes/resnet_v1_101_flownet_cityscapes_deeplab_end2end_ohem/leftImg8bit_train/' + model_name + '/dff_deeplab_vid'
+    model2 = '/../model/accel-18'
     sym_instance = eval(config.symbol + '.' + config.symbol)()
     key_sym = sym_instance.get_key_test_symbol(config)
     cur_sym = sym_instance.get_cur_test_symbol(config)
 
+    path_train_data = '/city/'
+    path_train_labels = '/ebs/Deep-Feature-Flow/data/cityscapes/'
+
     # load demo data
     if has_gt:
-        image_names  = sorted(glob.glob('/city/leftImg8bit_sequence/val/frankfurt/*.png'))
-        image_names += sorted(glob.glob('/city/leftImg8bit_sequence/val/lindau/*.png'))
-        image_names += sorted(glob.glob('/city/leftImg8bit_sequence/val/munster/*.png'))
+        image_names  = sorted(glob.glob(path_train_data + 'leftImg8bit_sequence/val/frankfurt/*.png'))
+        image_names += sorted(glob.glob(path_train_data + 'leftImg8bit_sequence/val/lindau/*.png'))
+        image_names += sorted(glob.glob(path_train_data + 'leftImg8bit_sequence/val/munster/*.png'))
         image_names = image_names[: snip_len * num_ex]
-        label_files  = sorted(glob.glob(cur_path + '/../data/cityscapes/gtFine/val/frankfurt/*trainIds.png'))
-        label_files += sorted(glob.glob(cur_path + '/../data/cityscapes/gtFine/val/lindau/*trainIds.png'))
-        label_files += sorted(glob.glob(cur_path + '/../data/cityscapes/gtFine/val/munster/*trainIds.png'))
+        label_files  = sorted(glob.glob(path_train_labels + 'gtFine/val/frankfurt/*trainIds.png'))
+        label_files += sorted(glob.glob(path_train_labels + 'gtFine/val/lindau/*trainIds.png'))
+        label_files += sorted(glob.glob(path_train_labels + 'gtFine/val/munster/*trainIds.png'))
     else:
         image_names = sorted(glob.glob(cur_path + '/../demo/cityscapes_frankfurt/*.png'))
         label_files = sorted(glob.glob(cur_path + '/../demo/cityscapes_frankfurt_preds/*.png'))
