@@ -39,6 +39,96 @@ def get_image(roidb, config):
         processed_roidb.append(new_rec)
     return processed_ims, processed_roidb
 
+def get_ref_imgs(seg_rec, config, num):
+
+    eq_flag = 0 # 0 for unequal, 1 for equal
+
+    prefix = ''
+    suffix = ''
+    if seg_rec['flipped']:
+        prefix = seg_rec['image'][:-len('000019_leftImg8bit_flip.png')]
+        suffix = seg_rec['image'][-len('000019_leftImg8bit_flip.png'):]
+    else:
+        prefix = seg_rec['image'][:-len('000019_leftImg8bit.png')]
+        suffix = seg_rec['image'][-len('000019_leftImg8bit.png'):]
+
+    frame_id = int(suffix[:len('000019')])
+
+    ref_imgs = []
+    for idx in range(num, 0, -1):
+
+        ref_id = frame_id - idx
+        # print 'frame id: {}\n ref id: {}'.format(frame_id, ref_id)
+
+        ref_prefix = prefix[len('./data/cityscapes/leftImg8bit/'):]
+        ref_im_name = '/city/leftImg8bit_sequence/' + ref_prefix + ('%06d' % ref_id) + '_leftImg8bit.png'
+        # print seg_rec['image']
+        # print ref_im_name
+
+        # read ref image
+        if not os.path.exists(ref_im_name):
+            print '{} does not exist'.format(ref_im_name)
+            ref_id = frame_id
+            ref_im_name = seg_rec['image']
+        ref_im = np.array(cv2.imread(ref_im_name))
+
+        ref_imgs.append(ref_im)
+
+    return ref_imgs, eq_flag
+
+def get_segmentation_pair(segdb, config):
+    """
+    propocess image and return segdb
+    :param segdb: a list of segdb
+    :return: list of img as mxnet format
+    """
+    num_images = len(segdb)
+    assert num_images > 0, 'No images'
+    processed_ims = []
+    processed_ref_ims = []
+    processed_eq_flags = []
+    processed_segdb = []
+    processed_seg_cls_gt = []
+    for i in range(num_images):
+        seg_rec = segdb[i]
+
+        assert os.path.exists(seg_rec['image']), '%s does not exist'.format(seg_rec['image'])
+        im = np.array(cv2.imread(seg_rec['image']))
+
+        assert not seg_rec['flipped']
+        ref_imgs, eq_flag = get_ref_imgs(seg_rec, config, config.TRAIN.KEY_INTERVAL - 1)
+
+        new_rec = seg_rec.copy()
+        scale_ind = random.randrange(len(config.SCALES))
+        target_size = config.SCALES[scale_ind][0]
+        max_size = config.SCALES[scale_ind][1]
+
+        im, im_scale = resize(im, target_size, max_size, stride=config.network.IMAGE_STRIDE)
+        im_tensor = transform(im, config.network.PIXEL_MEANS)
+        ref_im_tensors = []
+        for ref_im in ref_imgs:
+            ref_im, ref_im_scale = resize(ref_im, target_size, max_size, stride=config.network.IMAGE_STRIDE)
+            tensor = transform(ref_im, config.network.PIXEL_MEANS)
+            ref_im_tensors.append(tensor)
+        # print ref_im_tensors[0].shape
+        ref_im_tensor = np.concatenate(ref_im_tensors, axis=0)
+        # print ref_im_tensor.shape
+        im_info = [im_tensor.shape[2], im_tensor.shape[3], im_scale]
+        new_rec['im_info'] = im_info
+
+        seg_cls_gt = np.array(Image.open(seg_rec['seg_cls_path']))
+        seg_cls_gt, seg_cls_gt_scale = resize(
+            seg_cls_gt, target_size, max_size, stride=config.network.IMAGE_STRIDE, interpolation=cv2.INTER_NEAREST)
+        seg_cls_gt_tensor = transform_seg_gt(seg_cls_gt)
+
+        processed_ims.append(im_tensor)
+        processed_ref_ims.append(ref_im_tensor)
+        processed_eq_flags.append(eq_flag)
+        processed_segdb.append(new_rec)
+        processed_seg_cls_gt.append(seg_cls_gt_tensor)
+
+    return processed_ims, processed_ref_ims, processed_eq_flags, processed_seg_cls_gt, processed_segdb
+
 def get_pair_image(roidb, config):
     """
     preprocess image and return processed roidb
