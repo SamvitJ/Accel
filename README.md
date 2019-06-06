@@ -124,7 +124,7 @@ git clone https://github.com/SamvitJ/Accel.git
 ## Demo
 
 1. To run the demo with our trained models, please download the following models, and place them under folder `model/`:
-	- FlowNet model -- manually from [OneDrive](https://1drv.ms/u/s!Am-5JzdW2XHzhqMPLjGGCvAeciQflg) (for users from Mainland China, please try [Baidu Yun](https://pan.baidu.com/s/1nuPULnj))
+	- Base DFF model (with FlowNet) -- manually from [OneDrive](https://1drv.ms/u/s!Am-5JzdW2XHzhqMPLjGGCvAeciQflg) (for users in Mainland China, please try [Baidu Yun](https://pan.baidu.com/s/1nuPULnj))
 	- Accel models -- manually from [Google Drive]() [TODO: ADD LINK]
 
 	Make sure it looks like this:
@@ -145,23 +145,31 @@ git clone https://github.com/SamvitJ/Accel.git
 	```
 
 
-## Preparation for Training & Testing [UPDATE]
+## Preparation for Training & Testing
 
-1. Please download ILSVRC2015 DET and ILSVRC2015 VID dataset, and make sure it looks like this:
+1. Please download the Cityscapes dataset, and make sure the directories look like this:
 
 	```
-	./data/ILSVRC2015/
-	./data/ILSVRC2015/Annotations/DET
-	./data/ILSVRC2015/Annotations/VID
-	./data/ILSVRC2015/Data/DET
-	./data/ILSVRC2015/Data/VID
-	./data/ILSVRC2015/ImageSets
+	./data/cityscapes
+	./data/cityscapes/leftImg8bit_sequence/train
+	./data/cityscapes/leftImg8bit_sequence/val
+	./data/cityscapes/leftImg8bit_sequence/test
+	./data/cityscapes/gtFine/train
+	./data/cityscapes/gtFine/val
+	./data/cityscapes/gtFine/test
 	```
 
-2. Please download ImageNet pre-trained ResNet-v1-101 model and Flying-Chairs pre-trained FlowNet model manually from [OneDrive](https://1drv.ms/u/s!Am-5JzdW2XHzhqMOBdCBiNaKbcjPrA) (for users from Mainland China, please try [Baidu Yun](https://pan.baidu.com/s/1nuPULnj)), and put it under folder `./model`. Make sure it looks like this:
+2. Please download the following models, and place them under folder `./model`:
+	- Base DFF model (with FlowNet) -- manually from [OneDrive](https://1drv.ms/u/s!Am-5JzdW2XHzhqMOBdCBiNaKbcjPrA) (for users in Mainland China, please try [Baidu Yun](https://pan.baidu.com/s/1nuPULnj))
+	- DeepLab models -- manually from [Google Drive]() [TODO: ADD LINK]
+
+	Make sure it looks like this:
 	```
-	./model/pretrained_model/resnet_v1_101-0000.params
-	./model/pretrained_model/flownet-0000.params
+	./model/rfcn_dff_flownet_vid-0000.params
+	./model/pretrained/deeplab-18-0000.params
+	./model/pretrained/deeplab-34-0000.params
+	./model/pretrained/deeplab-50-0000.params
+	./model/pretrained/deeplab-101-0000.params
 	```
 
 
