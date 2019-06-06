@@ -45,10 +45,7 @@ def parse_args():
     parser.add_argument('-m', '--model_num', type=int, default=0)
     parser.add_argument('-mname', '--model_name', type=str, default='')
     parser.add_argument('--avg', dest='avg_acc', action='store_true')
-    parser.add_argument('--gt', dest='has_gt', action='store_true')
-    parser.add_argument('--no_gt', dest='has_gt', action='store_false')
     parser.set_defaults(avg_acc=False)
-    parser.set_defaults(has_gt=True)
     args = parser.parse_args()
     return args
 
@@ -125,7 +122,6 @@ def main():
     # settings
     num_classes = 19
     snip_len = 30
-    has_gt = args.has_gt
     interv = args.interval
     num_ex = args.num_ex
     model_num = args.model_num
@@ -145,17 +141,13 @@ def main():
     path_train_labels = '/ebs/Deep-Feature-Flow/data/cityscapes/'
 
     # load demo data
-    if has_gt:
-        image_names  = sorted(glob.glob(path_train_data + 'leftImg8bit_sequence/val/frankfurt/*.png'))
-        image_names += sorted(glob.glob(path_train_data + 'leftImg8bit_sequence/val/lindau/*.png'))
-        image_names += sorted(glob.glob(path_train_data + 'leftImg8bit_sequence/val/munster/*.png'))
-        image_names = image_names[: snip_len * num_ex]
-        label_files  = sorted(glob.glob(path_train_labels + 'gtFine/val/frankfurt/*trainIds.png'))
-        label_files += sorted(glob.glob(path_train_labels + 'gtFine/val/lindau/*trainIds.png'))
-        label_files += sorted(glob.glob(path_train_labels + 'gtFine/val/munster/*trainIds.png'))
-    else:
-        image_names = sorted(glob.glob(cur_path + '/../demo/cityscapes_frankfurt/*.png'))
-        label_files = sorted(glob.glob(cur_path + '/../demo/cityscapes_frankfurt_preds/*.png'))
+    image_names  = sorted(glob.glob(path_train_data + 'leftImg8bit_sequence/val/frankfurt/*.png'))
+    image_names += sorted(glob.glob(path_train_data + 'leftImg8bit_sequence/val/lindau/*.png'))
+    image_names += sorted(glob.glob(path_train_data + 'leftImg8bit_sequence/val/munster/*.png'))
+    image_names = image_names[: snip_len * num_ex]
+    label_files  = sorted(glob.glob(path_train_labels + 'gtFine/val/frankfurt/*trainIds.png'))
+    label_files += sorted(glob.glob(path_train_labels + 'gtFine/val/lindau/*trainIds.png'))
+    label_files += sorted(glob.glob(path_train_labels + 'gtFine/val/munster/*trainIds.png'))
     output_dir = cur_path + '/../demo/deeplab_dff/'
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -272,20 +264,16 @@ def main():
         segmentation_result.save(output_dir + '/seg_' + im_filename)
 
         label = None
-        if has_gt:
-            # if annotation available for frame
-            _, lb_filename = os.path.split(label_files[lb_idx])
-            im_comps = im_filename.split('_')
-            lb_comps = lb_filename.split('_')
-            if im_comps[1] == lb_comps[1] and im_comps[2] == lb_comps[2]:
-                print 'label {}'.format(lb_filename)
-                label = np.asarray(Image.open(label_files[lb_idx]))
-                if lb_idx < len(label_files) - 1:
-                    lb_idx += 1
-        else:
-            _, lb_filename = os.path.split(label_files[idx])
-            print 'label {}'.format(lb_filename[:len(ref_pred_prefix)])
-            label = np.asarray(Image.open(label_files[idx]))
+
+        _, lb_filename = os.path.split(label_files[lb_idx])
+        im_comps = im_filename.split('_')
+        lb_comps = lb_filename.split('_')
+        # check if annotation available for frame
+        if im_comps[1] == lb_comps[1] and im_comps[2] == lb_comps[2]:
+            print 'label {}'.format(lb_filename)
+            label = np.asarray(Image.open(label_files[lb_idx]))
+            if lb_idx < len(label_files) - 1:
+                lb_idx += 1
 
         if label is not None:
             curr_hist = fast_hist(pred.flatten(), label.flatten(), num_classes)
