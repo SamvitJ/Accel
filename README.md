@@ -121,24 +121,27 @@ git clone https://github.com/SamvitJ/Accel.git
 	3.5 For advanced users, you may put your Python packge into `./external/mxnet/$(YOUR_MXNET_PACKAGE)`, and modify `MXNET_VERSION` in `./experiments/dff_rfcn/cfgs/*.yaml` to `$(YOUR_MXNET_PACKAGE)`. Thus you can switch among different versions of MXNet quickly.
 
 
-## Demo [UPDATE]
+## Demo
 
-1. To run the demo with our trained model (on ImageNet DET + VID train), please download the model manually from [OneDrive](https://1drv.ms/u/s!Am-5JzdW2XHzhqMPLjGGCvAeciQflg) (for users from Mainland China, please try [Baidu Yun](https://pan.baidu.com/s/1nuPULnj)), and put it under folder `model/`.
+1. To run the demo with our trained models, please download the following models, and place them under folder `model/`:
+	- FlowNet model -- manually from [OneDrive](https://1drv.ms/u/s!Am-5JzdW2XHzhqMPLjGGCvAeciQflg) (for users from Mainland China, please try [Baidu Yun](https://pan.baidu.com/s/1nuPULnj))
+	- Accel models -- manually from [Google Drive]() [TODO: ADD LINK]
 
 	Make sure it looks like this:
 	```
-	./model/rfcn_vid-0000.params
 	./model/rfcn_dff_flownet_vid-0000.params
+	./model/accel-18-0000.params
+	./model/accel-34-0000.params
+	./model/accel-50-0000.params
+	./model/accel-101-0000.params
 	```
-2. Run (inference batch size = 1)
+2. Run (default: keyframe interval 1, num examples 10)
 	```
-	python ./rfcn/demo.py
-	python ./dff_rfcn/demo.py
+	python ./dff_deeplab/demo.py
 	```
-	or run (inference batch size = 10)
+	or run (custom: keyframe interval X, num examples Y)
 	```
-	python ./rfcn/demo_batch.py
-	python ./dff_rfcn/demo_batch.py
+	python ./dff_deeplab/demo.py --interval 5 --num_ex 100
 	```
 
 
