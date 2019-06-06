@@ -1,68 +1,69 @@
-# Deep Feature Flow for Video Recognition
+# Accel
 
-
-The major contributors of this repository include [Xizhou Zhu](https://github.com/einsiedler0408), [Yuwen Xiong](https://github.com/Orpine), [Jifeng Dai](https://github.com/daijifeng001), [Lu Yuan](http://www.lyuan.org/), and  [Yichen Wei](https://github.com/YichenWei).
 
 ## Introduction
 
+**Accel** is a fast, high accuracy video segmentation system, initially described in a [CVPR 2019 paper](https://arxiv.org/abs/1807.06667). Accel is an extension of [Deep Feature Flow](https://github.com/msracver/Deep-Feature-Flow), a video recognition framework released by MSR Asia in 2017.
 
-**Deep Feature Flow** is initially described in a [CVPR 2017 paper](https://arxiv.org/abs/1611.07715). It provides a simple, fast, accurate, and end-to-end framework for video recognition (e.g., object detection and semantic segmentation in videos). It is worth noting that:
+Some notes:
 
-* Deep Feature Flow significantly speeds up video recognition by applying the heavy-weight image recognition network (e.g., ResNet-101) on sparse key frames, and propagating the recognition outputs (feature maps) to the other frames by the light-weight flow network (e.g., [FlowNet](https://arxiv.org/abs/1504.06852)).
-* The entire system is end-to-end trained for the task of video recognition, which is vital for improving the recognition accuracy. Directly adopting state-of-the-art flow estimation methods without end-to-end training would deliver noticable worse results.
-* Deep Feature Flow can easily make use of sparsely annotated video recognition datasets, where only a small portion of the frames are annotated with ground-truth labels.
+* Accel combines optical-flow based keyframe feature warping (Deep Feature Flow) with per-frame temporal correction (DeepLab) in a score fusion step to improve on the accuracy of each of its constituent sub-networks.
+* Accel is trained end-to-end on the task of video semantic segmentation.
+* Accel can be built with a range of feature sub-networks, from ResNet-18 to ResNet-101. Accel based on ResNet-18 (Accel-18) is fast and reasonably accurate. Accel based on ResNet-101 (Accel-101) exceeds state-of-the-accuracy.
+* Accel can be evaluated on sparsely annotated video recognition datasets, such as Cityscapes and CamVid.
 
 ***Click image to watch our demo video***
 
 [![Demo Video on YouTube](https://media.giphy.com/media/14erFWP6f5tDVe/giphy.gif)](http://www.youtube.com/watch?v=J0rMHE6ehGw)
 [![Demo Video on YouTube](https://media.giphy.com/media/xwB5LVfIjLtS/giphy.gif)](http://www.youtube.com/watch?v=J0rMHE6ehGw)
 
-## Disclaimer
+## Comments
 
-This is an official implementation for [Deep Feature Flow for Video Recognition](https://arxiv.org/abs/1611.07715) (DFF) based on MXNet. It is worth noticing that:
+This is an official implementation for [Accel](https://arxiv.org/abs/1807.06667) in MXNet. It is worth noting that:
 
-  * The original implementation is based on our internal Caffe version on Windows. There are slight differences in the final accuracy and running time due to the plenty details in platform switch.
-  * The code is tested on official [MXNet@(commit 62ecb60)](https://github.com/dmlc/mxnet/tree/62ecb60) with the extra operators for Deep Feature Flow.
+  * The code is tested on official [MXNet@(commit 62ecb60)](https://github.com/dmlc/mxnet/tree/62ecb60).
   * We trained our model based on the ImageNet pre-trained [ResNet-v1-101](https://github.com/KaimingHe/deep-residual-networks) model and [Flying Chairs](https://lmb.informatik.uni-freiburg.de/resources/datasets/FlyingChairs.en.html) pre-trained [FlowNet](https://lmb.informatik.uni-freiburg.de/resources/binaries/dispflownet/dispflownet-release-1.2.tar.gz) model using a [model converter](https://github.com/dmlc/mxnet/tree/430ea7bfbbda67d993996d81c7fd44d3a20ef846/tools/caffe_converter). The converted [ResNet-v1-101](https://github.com/KaimingHe/deep-residual-networks) model produces slightly lower accuracy (Top-1 Error on ImageNet val: 24.0% v.s. 23.6%).
   * This repository used code from [MXNet rcnn example](https://github.com/dmlc/mxnet/tree/master/example/rcnn) and [mx-rfcn](https://github.com/giorking/mx-rfcn).
 
 
 
-
 ## License
 
-© Microsoft, 2017. Licensed under an Apache-2.0 license.
+© Microsoft, 2018. Licensed under the [MIT](LICENSE) License.
 
-## Citing Deep Feature Flow
 
-If you find Deep Feature Flow useful in your research, please consider citing:
+## Citing Accel
+
+If you find Accel useful in your research, please consider citing:
 ```
+@inproceedings{jain19,
+    Author = {Samvit Jain, Xin Wang, Joseph E. Gonzalez},
+    Title = {Accel: A Corrective Fusion Network for Efficient Semantic Segmentation on Video},
+    Conference = {CVPR},
+    Year = {2019}
+}
+
 @inproceedings{zhu17dff,
     Author = {Xizhou Zhu, Yuwen Xiong, Jifeng Dai, Lu Yuan, Yichen Wei},
     Title = {Deep Feature Flow for Video Recognition},
     Conference = {CVPR},
     Year = {2017}
 }
-
-@inproceedings{dai16rfcn,
-    Author = {Jifeng Dai, Yi Li, Kaiming He, Jian Sun},
-    Title = {{R-FCN}: Object Detection via Region-based Fully Convolutional Networks},
-    Conference = {NIPS},
-    Year = {2016}
-}
 ```
+
 
 ## Main Results
 
+|                                 | <sub>training data</sub>     | <sub>testing data</sub> | <sub>mIoU</sub> | <sub>time/image</br> (Tesla K80)</sub> |
+|---------------------------------|-------------------|--------------|---------|---------|
+| <sub>Deep Feature Flow</br>(DeepLab, ResNet-v1-101, FlowNet)</sub>                    | <sub>Cityscapes train</sub> | <sub>Cityscapes val</sub> | 68.7    | 0.25s    |
+| <sub>Accel-18</br>(DeepLab, ResNet-v1-18, FlowNet)</sub>           | <sub>Cityscapes train</sub> | <sub>Cityscapes val</sub> | 72.1   |  0.44s    |
+| <sub>Accel-50</br>(DeepLab, ResNet-v1-34, FlowNet)</sub>           | <sub>Cityscapes train</sub> | <sub>Cityscapes val</sub> | 74.2   |  0.67s    |
+| <sub>Frame-by-frame baseline</br>(DeepLab, ResNet-v1-101)</sub>                    | <sub>Cityscapes train</sub> | <sub>Cityscapes val</sub> | 75.2    | 0.74s    |
+| <sub>Accel-101</br>(DeepLab, ResNet-v1-101, FlowNet)</sub>           | <sub>Cityscapes train</sub> | <sub>Cityscapes val</sub> | 75.5   |  0.87s    |
 
-|                                 | <sub>training data</sub>     | <sub>testing data</sub> | <sub>mAP@0.5</sub> | <sub>time/image</br> (Tesla K40)</sub> | <sub>time/image</br>(Maxwell Titan X)</sub> |
-|---------------------------------|-------------------|--------------|---------|---------|--------|
-| <sub>Frame baseline</br>(R-FCN, ResNet-v1-101)</sub>                    | <sub>ImageNet DET train + VID train</sub> | <sub>ImageNet VID validation</sub> | 74.1    | 0.271s    | 0.133s |
-| <sub>Deep Feature Flow</br>(R-FCN, ResNet-v1-101, FlowNet)</sub>           | <sub>ImageNet DET train + VID train</sub> | <sub>ImageNet VID validation</sub> | 73.0    | 0.073s    | 0.034s |
+*Running time is benchmarked on a single GPU (mini-batch size 1, key-frame duration length 5).*
 
-*Running time is counted on a single GPU (mini-batch size is 1 in inference, key-frame duration length for Deep Feature Flow is 10).*
-
-*The runtime of the light-weight FlowNet seems to be a bit slower on MXNet than that on Caffe.*
 
 ## Requirements: Software
 
@@ -83,12 +84,13 @@ If you find Deep Feature Flow useful in your research, please consider citing:
 
 Any NVIDIA GPUs with at least 6GB memory should be OK
 
+
 ## Installation
 
-1. Clone the Deep Feature Flow repository, and we'll call the directory that you cloned Deep-Feature-Flow as ${DFF_ROOT}. 
+1. Clone the Accel repository. Let ${Accel_ROOT} denote the cloned repository. 
 
 ~~~
-git clone https://github.com/msracver/Deep-Feature-Flow.git
+git clone https://github.com/SamvitJ/Accel.git
 ~~~
 2. For Windows users, run ``cmd .\init.bat``. For Linux user, run `sh ./init.sh`. The scripts will build cython module automatically and create some folders.
 
@@ -100,9 +102,9 @@ git clone https://github.com/msracver/Deep-Feature-Flow.git
 	git checkout 62ecb60
 	git submodule update
 	```
-	3.2 Copy operators in `$(DFF_ROOT)/dff_rfcn/operator_cxx` or `$(DFF_ROOT)/rfcn/operator_cxx` to `$(YOUR_MXNET_FOLDER)/src/operator/contrib` by
+	3.2 Copy operators in `$(Accel_ROOT)/dff_rfcn/operator_cxx` or `$(Accel_ROOT)/rfcn/operator_cxx` to `$(YOUR_MXNET_FOLDER)/src/operator/contrib` by
 	```
-	cp -r $(DFF_ROOT)/dff_rfcn/operator_cxx/* $(MXNET_ROOT)/src/operator/contrib/
+	cp -r $(Accel_ROOT)/dff_rfcn/operator_cxx/* $(MXNET_ROOT)/src/operator/contrib/
 	```
 	3.3 Compile MXNet
 	```
@@ -119,8 +121,7 @@ git clone https://github.com/msracver/Deep-Feature-Flow.git
 	3.5 For advanced users, you may put your Python packge into `./external/mxnet/$(YOUR_MXNET_PACKAGE)`, and modify `MXNET_VERSION` in `./experiments/dff_rfcn/cfgs/*.yaml` to `$(YOUR_MXNET_PACKAGE)`. Thus you can switch among different versions of MXNet quickly.
 
 
-## Demo
-
+## Demo [UPDATE]
 
 1. To run the demo with our trained model (on ImageNet DET + VID train), please download the model manually from [OneDrive](https://1drv.ms/u/s!Am-5JzdW2XHzhqMPLjGGCvAeciQflg) (for users from Mainland China, please try [Baidu Yun](https://pan.baidu.com/s/1nuPULnj)), and put it under folder `model/`.
 
@@ -140,7 +141,8 @@ git clone https://github.com/msracver/Deep-Feature-Flow.git
 	python ./dff_rfcn/demo_batch.py
 	```
 
-## Preparation for Training & Testing
+
+## Preparation for Training & Testing [UPDATE]
 
 1. Please download ILSVRC2015 DET and ILSVRC2015 VID dataset, and make sure it looks like this:
 
@@ -159,19 +161,21 @@ git clone https://github.com/msracver/Deep-Feature-Flow.git
 	./model/pretrained_model/flownet-0000.params
 	```
 
+
 ## Usage
 
-1. All of our experiment settings (GPU #, dataset, etc.) are kept in yaml config files at folder `./experiments/{rfcn/dff_rfcn}/cfgs`.
+1. All of our experiment settings (GPU #, dataset, etc.) are kept in yaml config files at folder `./experiments/{dff_deeplab}/cfgs`.
 
-2. Two config files have been provided so far, namely, Frame baseline with R-FCN and Deep Feature Flow with R-FCN for ImageNet VID. We use 4 GPUs to train models on ImageNet VID.
+2. Two baseline config files are provided: DeepLab frame-by-frame and Deep Feature Flow. We use 4 GPUs to train models on Cityscapes and CamVid.
 
-3. To perform experiments, run the python script with the corresponding config file as input. For example, to train and test Deep Feature Flow with R-FCN, use the following command
+3. To perform experiments, run the python script with the corresponding config file as input. For example, to train and test Accel with DeepLab, use the following command
     ```
-    python experiments/dff_rfcn/dff_rfcn_end2end_train_test.py --cfg experiments/dff_rfcn/cfgs/resnet_v1_101_flownet_imagenet_vid_rfcn_end2end_ohem.yaml
+    python experiments/dff_deeplab/dff_deeplab_end2end_train_test.py --cfg experiments/dff_deeplab/cfgs/resnet_v1_101_flownet_cityscapes_deeplab_end2end_ohem.yaml
     ```
-	A cache folder would be created automatically to save the model and the log under `output/dff_rfcn/imagenet_vid/`.
+	A cache folder will be created automatically to save the model and the log under `output/dff_deeplab/cityscapes/`.
     
 4. Please find more details in config files and in our code.
+
 
 ## Misc.
 
@@ -181,29 +185,7 @@ Code has been tested under:
 - Windows Server 2012 R2 with 8 K40 GPUs and Intel Xeon CPU E5-2650 v2 @ 2.60GHz
 - Windows Server 2012 R2 with 4 Pascal Titan X GPUs and Intel Xeon CPU E5-2650 v4 @ 2.30GHz
 
+
 ## FAQ
 
-Q: It says `AttributeError: 'module' object has no attribute 'MultiProposal'`.
-
-A: This is because either
- - you forget to copy the operators to your MXNet folder
- - or you copy to the wrong path
- - or you forget to re-compile and install
- - or you install the wrong MXNet
-
-    Please print `mxnet.__path__` to make sure you use correct MXNet
-
-<br/><br/>
-Q: I encounter `segment fault` at the beginning.
-
-A: A compatibility issue has been identified between MXNet and opencv-python 3.0+. We suggest that you always `import cv2` first before `import mxnet` in the entry script. 
-
-<br/><br/>
-Q: I find the training speed becomes slower when training for a long time.
-
-A: It has been identified that MXNet on Windows has this problem. So we recommend to run this program on Linux. You could also stop it and resume the training process to regain the training speed if you encounter this problem.
-
-<br/><br/>
-Q: Can you share your caffe implementation?
-
-A: Due to several reasons (code is based on a old, internal Caffe, port to public Caffe needs extra work, time limit, etc.). We do not plan to release our Caffe code. Since a warping layer is easy to implement, anyone who wish to do it is welcome to make a pull request.
+For common errors, please see the [Deep Feature Flow FAQ](https://github.com/msracver/Deep-Feature-Flow#FAQ).
