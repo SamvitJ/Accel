@@ -125,7 +125,7 @@ git clone https://github.com/SamvitJ/Accel.git
 
 1. To run the demo with our trained models, please download the following models, and place them under folder `model/`:
 	- Base DFF model (with FlowNet) -- manually from [OneDrive](https://1drv.ms/u/s!Am-5JzdW2XHzhqMPLjGGCvAeciQflg) (for users in Mainland China, please try [Baidu Yun](https://pan.baidu.com/s/1nuPULnj))
-	- Accel models -- manually from [Google Drive]() [TODO: ADD LINK]
+	- Accel models -- manually from [Google Drive](https://drive.google.com/open?id=1uAdM8V46zyw-Mwraq_Q3c6oCIM7qgUle)
 
 	Make sure it looks like this:
 	```
@@ -161,7 +161,7 @@ git clone https://github.com/SamvitJ/Accel.git
 
 2. Please download the following models, and place them under folder `./model`:
 	- Base DFF model (with FlowNet) -- manually from [OneDrive](https://1drv.ms/u/s!Am-5JzdW2XHzhqMOBdCBiNaKbcjPrA) (for users in Mainland China, please try [Baidu Yun](https://pan.baidu.com/s/1nuPULnj))
-	- DeepLab models -- manually from [Google Drive]() [TODO: ADD LINK]
+	- DeepLab models -- manually from [Google Drive](https://drive.google.com/open?id=1BnF6N8fQ9IHGo4nixZQHEpjkeYaVqoPE)
 
 	Make sure it looks like this:
 	```
