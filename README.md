@@ -29,7 +29,7 @@ This is an official implementation for [Accel](https://arxiv.org/abs/1807.06667)
 
 ## License
 
-© Microsoft, 2018. Licensed under the [MIT](LICENSE) License.
+© UC Berkeley and Microsoft, 2019. Licensed under the [MIT](LICENSE) License.
 
 
 ## Citing Accel
