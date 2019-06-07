@@ -3,7 +3,7 @@
 
 ## Introduction
 
-**Accel** is a fast, high accuracy video segmentation system, initially described in a [CVPR 2019 paper](https://arxiv.org/abs/1807.06667). Accel is an extension of [Deep Feature Flow](https://github.com/msracver/Deep-Feature-Flow), a video recognition framework released by MSR Asia in 2017.
+**Accel** is a fast, high accuracy video segmentation system, initially described in a [CVPR 2019 paper](https://arxiv.org/abs/1807.06667). Accel is implemented as an extension of [Deep Feature Flow](https://github.com/msracver/Deep-Feature-Flow), a video recognition framework released by MSR Asia in 2017.
 
 Some notes:
 
@@ -12,10 +12,16 @@ Some notes:
 * Accel can be built with a range of feature sub-networks, from ResNet-18 to ResNet-101. Accel based on ResNet-18 (Accel-18) is fast and reasonably accurate. Accel based on ResNet-101 (Accel-101) exceeds state-of-the-accuracy.
 * Accel can be evaluated on sparsely annotated video recognition datasets, such as Cityscapes and CamVid.
 
-***Click image to watch our demo video***
+***Example visualizations***
 
-[![Demo Video on YouTube](https://media.giphy.com/media/14erFWP6f5tDVe/giphy.gif)](http://www.youtube.com/watch?v=J0rMHE6ehGw)
-[![Demo Video on YouTube](https://media.giphy.com/media/xwB5LVfIjLtS/giphy.gif)](http://www.youtube.com/watch?v=J0rMHE6ehGw)
+<a> <img src="http://www.samvitjain.com/accel/graphics/gifs/out1/dff.gif" width="250"> <img src="http://www.samvitjain.com/accel/graphics/gifs/out1/dl18.gif" width="250"> <img src="http://www.samvitjain.com/accel/graphics/gifs/out1/a18.gif" width="250"> </a>
+
+<a> <img src="http://www.samvitjain.com/accel/graphics/gifs/out2/dff.gif" width="250"> <img src="http://www.samvitjain.com/accel/graphics/gifs/out2/dl18.gif" width="250"> <img src="http://www.samvitjain.com/accel/graphics/gifs/out2/a18.gif" width="250"> </a>
+
+<a href="https://arxiv.org/pdf/1611.07715.pdf" style="text-align: center; display:inline-block; width:250px">Deep Feature Flow</a>
+<a href="https://arxiv.org/pdf/1706.05587.pdf" style="text-align: center; display:inline-block; width:250px">DeepLab-18</a>
+<a href="https://arxiv.org/pdf/1807.06667.pdf" style="text-align: center; display:inline-block; width:250px">Accel-18</a>
+
 
 ## Comments
 
@@ -57,7 +63,8 @@ If you find Accel useful in your research, please consider citing:
 |---------------------------------|-------------------|--------------|---------|---------|
 | <sub>Deep Feature Flow</br>(DeepLab, ResNet-v1-101, FlowNet)</sub>                    | <sub>Cityscapes train</sub> | <sub>Cityscapes val</sub> | 68.7    | 0.25s    |
 | <sub>Accel-18</br>(DeepLab, ResNet-v1-18, FlowNet)</sub>           | <sub>Cityscapes train</sub> | <sub>Cityscapes val</sub> | 72.1   |  0.44s    |
-| <sub>Accel-50</br>(DeepLab, ResNet-v1-34, FlowNet)</sub>           | <sub>Cityscapes train</sub> | <sub>Cityscapes val</sub> | 74.2   |  0.67s    |
+| <sub>Accel-34</br>(DeepLab, ResNet-v1-34, FlowNet)</sub>           | <sub>Cityscapes train</sub> | <sub>Cityscapes val</sub> | 72.4   |  0.53s    |
+| <sub>Accel-50</br>(DeepLab, ResNet-v1-50, FlowNet)</sub>           | <sub>Cityscapes train</sub> | <sub>Cityscapes val</sub> | 74.2   |  0.67s    |
 | <sub>Frame-by-frame baseline</br>(DeepLab, ResNet-v1-101)</sub>                    | <sub>Cityscapes train</sub> | <sub>Cityscapes val</sub> | 75.2    | 0.74s    |
 | <sub>Accel-101</br>(DeepLab, ResNet-v1-101, FlowNet)</sub>           | <sub>Cityscapes train</sub> | <sub>Cityscapes val</sub> | 75.5   |  0.87s    |
 
