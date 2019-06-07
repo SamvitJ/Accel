@@ -23,8 +23,7 @@ This is an official implementation for [Accel](https://arxiv.org/abs/1807.06667)
 
   * The code is tested on official [MXNet@(commit 62ecb60)](https://github.com/dmlc/mxnet/tree/62ecb60).
   * We trained our model based on the ImageNet pre-trained [ResNet-v1-101](https://github.com/KaimingHe/deep-residual-networks) model and [Flying Chairs](https://lmb.informatik.uni-freiburg.de/resources/datasets/FlyingChairs.en.html) pre-trained [FlowNet](https://lmb.informatik.uni-freiburg.de/resources/binaries/dispflownet/dispflownet-release-1.2.tar.gz) model using a [model converter](https://github.com/dmlc/mxnet/tree/430ea7bfbbda67d993996d81c7fd44d3a20ef846/tools/caffe_converter). The converted [ResNet-v1-101](https://github.com/KaimingHe/deep-residual-networks) model produces slightly lower accuracy (Top-1 Error on ImageNet val: 24.0% v.s. 23.6%).
-  * This repository used code from [MXNet rcnn example](https://github.com/dmlc/mxnet/tree/master/example/rcnn) and [mx-rfcn](https://github.com/giorking/mx-rfcn).
-
+  * This repository used code from [MXNet R-CNN example](https://github.com/dmlc/mxnet/tree/master/example/rcnn) and [MX-RFCN](https://github.com/giorking/mx-rfcn).
 
 
 ## License
@@ -87,7 +86,7 @@ Any NVIDIA GPUs with at least 6GB memory should be OK
 
 ## Installation
 
-1. Clone the Accel repository. Let ${Accel_ROOT} denote the cloned repository. 
+1. Clone the Accel repository. Let ${ACCEL_ROOT} denote the cloned repository.
 
 ~~~
 git clone https://github.com/SamvitJ/Accel.git
@@ -102,9 +101,9 @@ git clone https://github.com/SamvitJ/Accel.git
 	git checkout 62ecb60
 	git submodule update
 	```
-	3.2 Copy operators in `$(Accel_ROOT)/dff_rfcn/operator_cxx` or `$(Accel_ROOT)/rfcn/operator_cxx` to `$(YOUR_MXNET_FOLDER)/src/operator/contrib` by
+	3.2 Copy operators in `$(ACCEL_ROOT)/dff_rfcn/operator_cxx` or `$(ACCEL_ROOT)/rfcn/operator_cxx` to `$(YOUR_MXNET_FOLDER)/src/operator/contrib` by
 	```
-	cp -r $(Accel_ROOT)/dff_rfcn/operator_cxx/* $(MXNET_ROOT)/src/operator/contrib/
+	cp -r $(ACCEL_ROOT)/dff_rfcn/operator_cxx/* $(MXNET_ROOT)/src/operator/contrib/
 	```
 	3.3 Compile MXNet
 	```
@@ -118,7 +117,7 @@ git clone https://github.com/SamvitJ/Accel.git
 	cd python
 	sudo python setup.py install
 	```
-	3.5 For advanced users, you may put your Python packge into `./external/mxnet/$(YOUR_MXNET_PACKAGE)`, and modify `MXNET_VERSION` in `./experiments/dff_rfcn/cfgs/*.yaml` to `$(YOUR_MXNET_PACKAGE)`. Thus you can switch among different versions of MXNet quickly.
+	3.5 For advanced users, you may put your Python packge into `./external/mxnet/$(YOUR_MXNET_PACKAGE)`, and modify `MXNET_VERSION` in `./experiments/dff_deeplab/cfgs/*.yaml` to `$(YOUR_MXNET_PACKAGE)`. Thus you can switch among different versions of MXNet quickly.
 
 
 ## Demo
