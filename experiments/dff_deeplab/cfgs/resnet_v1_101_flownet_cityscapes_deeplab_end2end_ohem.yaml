@@ -2,7 +2,7 @@
 MXNET_VERSION: "mxnet"
 output_path: "./output/dff_deeplab/cityscapes"
 symbol: resnet_v1_101_flownet_deeplab
-gpus: '0,1,2,3,4,5,6,7'
+gpus: '0'
 SCALES:
 - 1024
 - 2048
