@@ -18,9 +18,9 @@ Some notes:
 
 <a> <img src="http://www.samvitjain.com/accel/graphics/gifs/out2/dff.gif" width="250"> <img src="http://www.samvitjain.com/accel/graphics/gifs/out2/dl18.gif" width="250"> <img src="http://www.samvitjain.com/accel/graphics/gifs/out2/a18.gif" width="250"> </a>
 
-<a href="https://arxiv.org/pdf/1611.07715.pdf" style="text-align: center; display:inline-block; width:250px">Deep Feature Flow</a>
-<a href="https://arxiv.org/pdf/1706.05587.pdf" style="text-align: center; display:inline-block; width:250px">DeepLab-18</a>
-<a href="https://arxiv.org/pdf/1807.06667.pdf" style="text-align: center; display:inline-block; width:250px">Accel-18</a>
+<pre>
+      Deep Feature Flow 		DeepLab-18 			Accel-18
+</pre>
 
 
 ## Comments
