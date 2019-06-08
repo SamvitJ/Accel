@@ -81,7 +81,7 @@ class CityScape(IMDB):
         :return: the image path
         """
         index_folder = index.split('_')[0]
-        image_file = os.path.join(self.data_path, 'gtFine', self.image_set_sub_folder, index_folder, index + '_gtFine_labelTrainIds.png')
+        image_file = os.path.join(self.data_path, 'gtFine', self.image_set_sub_folder, index_folder, index + '_gtFine_trainIds.png')
         assert os.path.exists(image_file), 'Path does not exist: {}'.format(image_file)
         return image_file
 
@@ -217,7 +217,7 @@ class CityScape(IMDB):
             seg_gt = np.array(Image.open(seg_gt_info['seg_cls_path'])).astype('float32')
 
             seg_pathes = os.path.split(seg_gt_info['seg_cls_path'])
-            res_image_name = seg_pathes[1][:-len('_gtFine_labelTrainIds.png')]
+            res_image_name = seg_pathes[1][:-len('_gtFine_trainIds.png')]
             res_subfolder_name = os.path.split(seg_pathes[0])[-1]
             res_save_folder = os.path.join(res_file_folder, res_subfolder_name)
             res_save_path = os.path.join(res_save_folder, res_image_name + '.png')
@@ -257,7 +257,7 @@ class CityScape(IMDB):
             seg_gt_info = self.load_segdb_from_index(index)
 
             seg_pathes = os.path.split(seg_gt_info['seg_cls_path'])
-            res_image_name = seg_pathes[1][:-len('_gtFine_labelTrainIds.png')]
+            res_image_name = seg_pathes[1][:-len('_gtFine_trainIds.png')]
             res_subfolder_name = os.path.split(seg_pathes[0])[-1]
             res_save_folder = os.path.join(res_file_folder, res_subfolder_name)
             res_save_path = os.path.join(res_save_folder, res_image_name + '.png')
