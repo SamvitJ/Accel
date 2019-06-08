@@ -58,7 +58,6 @@ def train_net(args, ctx, pretrained, pretrained_flow, pretrained_ec, epoch, pref
     shutil.copy2(os.path.join(curr_path, 'symbols', config.symbol + '.py'), final_output_path)
     sym_instance = eval(config.symbol + '.' + config.symbol)()
     sym = sym_instance.get_train_symbol(config)
-    # feat_sym = sym.get_internals()['rpn_cls_score_output']
 
     # setup multi-gpu
     batch_size = len(ctx)
@@ -76,11 +75,6 @@ def train_net(args, ctx, pretrained, pretrained_flow, pretrained_ec, epoch, pref
     segdb = merge_segdb(segdbs)
 
     # load training data
-    # train_data = AnchorLoader(feat_sym, roidb, config, batch_size=input_batch_size, shuffle=config.TRAIN.SHUFFLE, ctx=ctx,
-    #                           feat_stride=config.network.RPN_FEAT_STRIDE, anchor_scales=config.network.ANCHOR_SCALES,
-    #                           anchor_ratios=config.network.ANCHOR_RATIOS, aspect_grouping=config.TRAIN.ASPECT_GROUPING,
-    #                           normalize_target=config.network.NORMALIZE_RPN, bbox_mean=config.network.ANCHOR_MEANS,
-    #                           bbox_std=config.network.ANCHOR_STDS)
     train_data = TrainDataLoader(sym, segdb, config, batch_size=input_batch_size, crop_height=config.TRAIN.CROP_HEIGHT, crop_width=config.TRAIN.CROP_WIDTH,
                                  shuffle=config.TRAIN.SHUFFLE, ctx=ctx)
 
@@ -127,17 +121,9 @@ def train_net(args, ctx, pretrained, pretrained_flow, pretrained_ec, epoch, pref
 
     # decide training params
     # metric
-    # rpn_eval_metric = metric.RPNAccMetric()
-    # rpn_cls_metric = metric.RPNLogLossMetric()
-    # rpn_bbox_metric = metric.RPNL1LossMetric()
-    # eval_metric = metric.RCNNAccMetric(config)
-    # cls_metric = metric.RCNNLogLossMetric(config)
-    # bbox_metric = metric.RCNNL1LossMetric(config)
-    # eval_metrics = mx.metric.CompositeEvalMetric()
     fcn_loss_metric = metric.FCNLogLossMetric(config.default.frequent * batch_size)
     eval_metrics = mx.metric.CompositeEvalMetric()
 
-    # rpn_eval_metric, rpn_cls_metric, rpn_bbox_metric, eval_metric, cls_metric, bbox_metric
     for child_metric in [fcn_loss_metric]:
         eval_metrics.add(child_metric)
 
