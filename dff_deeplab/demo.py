@@ -192,8 +192,7 @@ def main():
                        ('data_key', (1, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),]]
     provide_data = [[(k, v.shape) for k, v in zip(data_names, data[i])] for i in xrange(len(data))]
     provide_label = [None for i in xrange(len(data))]
-    # models: rfcn_dff_flownet_vid, deeplab_cityscapes
-    # arg_params, aux_params = load_param_multi(cur_path + model1, cur_path + model2, 0, process=True)
+
     arg_params, aux_params = load_param(cur_path + model1, 0, process=True)
     arg_params_dcn, aux_params_dcn = load_param(cur_path + model2, model_num, process=True)
     arg_params.update(arg_params_dcn)
@@ -215,13 +214,11 @@ def main():
                                      provide_label=[None])
         scales = [data_batch.data[i][1].asnumpy()[0, 2] for i in xrange(len(data_batch.data))]
         if j % key_frame_interval == 0:
-            # scores, boxes, data_dict, feat = im_detect(key_predictor, data_batch, data_names, scales, config)
             output_all, feat = im_segment(key_predictor, data_batch)
             output_all = [mx.ndarray.argmax(output['croped_score_output'], axis=1).asnumpy() for output in output_all]
         else:
             data_batch.data[0][-1] = feat
             data_batch.provide_data[0][-1] = ('feat_key', feat.shape)
-            # scores, boxes, data_dict, _ = im_detect(cur_predictor, data_batch, data_names, scales, config)
             output_all, feat = im_segment(cur_predictor, data_batch)
             output_all = [mx.ndarray.argmax(output['correction_output'], axis=1).asnumpy() for output in output_all]
 
@@ -240,14 +237,12 @@ def main():
         tic()
         if idx % key_frame_interval == 0:
             print '\n\nframe {} (key)'.format(idx)
-            # scores, boxes, data_dict, feat = im_detect(key_predictor, data_batch, data_names, scales, config)
             output_all, feat = im_segment(key_predictor, data_batch)
             output_all = [mx.ndarray.argmax(output['croped_score_output'], axis=1).asnumpy() for output in output_all]
         else:
             print '\nframe {} (intermediate)'.format(idx)
             data_batch.data[0][-1] = feat
             data_batch.provide_data[0][-1] = ('feat_key', feat.shape)
-            # scores, boxes, data_dict, _ = im_detect(cur_predictor, data_batch, data_names, scales, config)
             output_all, feat = im_segment(cur_predictor, data_batch)
             output_all = [mx.ndarray.argmax(output['correction_output'], axis=1).asnumpy() for output in output_all]
 
@@ -263,6 +258,7 @@ def main():
         _, im_filename = os.path.split(im_name)
         segmentation_result.save(output_dir + '/seg_' + im_filename)
 
+        # compute accuracy
         label = None
 
         _, lb_filename = os.path.split(label_files[lb_idx])
