@@ -1,7 +1,7 @@
 ---
 MXNET_VERSION: "mxnet"
 output_path: "./output/dff_deeplab/cityscapes"
-symbol: accel_18
+symbol: accel_50
 gpus: '0'
 SCALES:
 - 1024
@@ -12,7 +12,7 @@ default:
 network:
   pretrained: "./model/rfcn_dff_flownet_vid"
   pretrained_flow: "./model/pretrained/deeplab-101"
-  pretrained_ec: "./model/pretrained/deeplab-18"
+  pretrained_ec: "./model/pretrained/deeplab-50"
   pretrained_epoch: 0
   PIXEL_MEANS:
   - 103.06
@@ -33,12 +33,16 @@ network:
   - bn4
   - res5
   - bn5
-  # task
+  # res-50
+  - "50_"
+  # L task
   - fc6
   - score
   - upsampling
-  # res-18
-  - "18_"
+  # R task
+  - curr_fc6
+  - curr_score
+  - curr_upsampling
   # flow
   - ReLU
   - flow_conv1
@@ -81,7 +85,7 @@ TRAIN:
   lr: 0.0005
   lr_step: '53'
   model_prefix: "dff_deeplab_vid"
-  weight_prefix: "18_"
+  arg_prefix: "50_"
   # whether flip image
   FLIP: false
   # size of images for each device

@@ -99,7 +99,7 @@ def train_net(args, ctx, pretrained, pretrained_flow, pretrained_ec, epoch, pref
         arg_params_flow, aux_params_flow = load_param(pretrained_flow, epoch, convert=True)
         arg_params.update(arg_params_flow)
         aux_params.update(aux_params_flow)
-        arg_params_ec, aux_params_ec = load_param(pretrained_ec, epoch, convert=True, argprefix='18_')
+        arg_params_ec, aux_params_ec = load_param(pretrained_ec, epoch, convert=True, argprefix=config.TRAIN.arg_prefix)
         arg_params.update(arg_params_ec)
         aux_params.update(aux_params_ec)
         sym_instance.init_weight(config, arg_params, aux_params)
