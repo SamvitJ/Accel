@@ -127,34 +127,13 @@ git clone https://github.com/SamvitJ/Accel.git
 	3.5 For advanced users, you may put your Python packge into `./external/mxnet/$(YOUR_MXNET_PACKAGE)`, and modify `MXNET_VERSION` in `./experiments/dff_deeplab/cfgs/*.yaml` to `$(YOUR_MXNET_PACKAGE)`. Thus you can switch among different versions of MXNet quickly.
 
 
-## Demo
+## Data preparation
 
-1. To run the demo with our trained models, please download the following models, and place them under folder `model/`:
-	- Base DFF model (with FlowNet) -- manually from [OneDrive](https://1drv.ms/u/s!Am-5JzdW2XHzhqMPLjGGCvAeciQflg) (for users in Mainland China, please try [Baidu Yun](https://pan.baidu.com/s/1nuPULnj))
-	- Accel models -- manually from [Google Drive](https://drive.google.com/open?id=1uAdM8V46zyw-Mwraq_Q3c6oCIM7qgUle)
+1. Please download the [Cityscapes dataset](https://www.cityscapes-dataset.com/login/). Specifically, make sure to download the [leftImg8bit_sequence_trainvaltest.zip](https://www.cityscapes-dataset.com/file-handling/?packageID=14) package (324GB), which contains 30-frame snippets for each Cityscapes train / val / test example. This is a requirement for testing at keyframe intervals > 1.
 
-	Make sure it looks like this:
-	```
-	./model/rfcn_dff_flownet_vid-0000.params
-	./model/accel-18-0000.params
-	./model/accel-34-0000.params
-	./model/accel-50-0000.params
-	./model/accel-101-0000.params
-	```
-2. Run (default: keyframe interval 1, num examples 10)
-	```
-	python ./dff_deeplab/demo.py
-	```
-	or run (custom: keyframe interval X, num examples Y)
-	```
-	python ./dff_deeplab/demo.py --interval 5 --num_ex 100
-	```
+	In addition, download [gtFine_trainvaltest.zip](https://www.cityscapes-dataset.com/file-handling/?packageID=1) (241MB) for the ground truth annotations.
 
-
-## Preparation for Training & Testing
-
-1. Please download the Cityscapes dataset, and make sure the directories look like this:
-
+	Place the data in the `data` folder under the root directory:
 	```
 	./data/cityscapes
 	./data/cityscapes/leftImg8bit_sequence/train
@@ -165,11 +144,48 @@ git clone https://github.com/SamvitJ/Accel.git
 	./data/cityscapes/gtFine/test
 	```
 
-2. Please download the following models, and place them under folder `./model`:
+
+## Demo / Inference
+
+1. To evaluate Accel using our models, please download the following models, and place them under folder `model/`:
+	- Base DFF model (with FlowNet) -- manually from [OneDrive](https://1drv.ms/u/s!Am-5JzdW2XHzhqMPLjGGCvAeciQflg) (for users in Mainland China, please try [Baidu Yun](https://pan.baidu.com/s/1nuPULnj))
+	- Accel models -- manually from [Google Drive](https://drive.google.com/open?id=1uAdM8V46zyw-Mwraq_Q3c6oCIM7qgUle)
+
+	Make sure the directory looks like this:
+	```
+	./model/rfcn_dff_flownet_vid-0000.params
+	./model/accel-18-0000.params
+	./model/accel-34-0000.params
+	./model/accel-50-0000.params
+	./model/accel-101-0000.params
+	```
+
+2. Edit `dff_deeplab/demo.py` to set `path_demo_data` and `path_demo_labels`. These should specify the path to the **parent directories** housing the Cityscapes sequence data and labels on your disk. For example:
+	```
+    path_demo_data = '/ebs/Accel/data/cityscapes/'
+    path_demo_labels = '/ebs/Accel/data/cityscapes/'
+	```
+
+3. Run the following commands to evaluate Accel-18 on the Cityscapes val data.
+
+   Default setting (keyframe interval 1, num examples 10):
+	```
+	python ./dff_deeplab/demo.py
+	```
+   Custom setting (keyframe interval X, num examples Y):
+	```
+	python ./dff_deeplab/demo.py --interval 5 --num_ex 100
+	```
+   See `dff_deeplab/demo.py` for other configurable runtime settings.
+
+
+## Training
+
+1. Please download the following models, and place them under folder `./model`:
 	- Base DFF model (with FlowNet) -- manually from [OneDrive](https://1drv.ms/u/s!Am-5JzdW2XHzhqMOBdCBiNaKbcjPrA) (for users in Mainland China, please try [Baidu Yun](https://pan.baidu.com/s/1nuPULnj))
 	- DeepLab models -- manually from [Google Drive](https://drive.google.com/open?id=1BnF6N8fQ9IHGo4nixZQHEpjkeYaVqoPE)
 
-	Make sure it looks like this:
+	Make sure the directory looks like this:
 	```
 	./model/rfcn_dff_flownet_vid-0000.params
 	./model/pretrained/deeplab-18-0000.params
@@ -178,25 +194,32 @@ git clone https://github.com/SamvitJ/Accel.git
 	./model/pretrained/deeplab-101-0000.params
 	```
 
+2. Edit the file `experiments/dff_deeplab/cfgs/resnet_v1_101_flownet_cityscapes_deeplab_end2end_ohem.yaml` to specify the GPU ids available for training on your machine. For example, if you are testing on p2.8xlarge (an Amazon EC2 instance with 8 GPUs), set:
+	```
+	gpus: '0,1,2,3,4,5,6,7'
+	```
 
-## Usage
-
-1. All of our experiment settings (GPU #, dataset, etc.) are kept in yaml config files at folder `./experiments/{dff_deeplab}/cfgs`.
-
-2. Two baseline config files are provided: DeepLab frame-by-frame and Deep Feature Flow. We use 4 GPUs to train models on Cityscapes and CamVid.
-
-3. To perform experiments, run the python script with the corresponding config file as input. For example, to train and test Accel with DeepLab, use the following command
+3. To train Accel, use the following command. The default configuration is to train Accel-18, with preloaded weights from the base DFF and DeepLab-18 models.
     ```
     python experiments/dff_deeplab/dff_deeplab_end2end_train_test.py --cfg experiments/dff_deeplab/cfgs/resnet_v1_101_flownet_cityscapes_deeplab_end2end_ohem.yaml
     ```
-	A cache folder will be created automatically to save the model and the log under `output/dff_deeplab/cityscapes/`.
-    
-4. Please find more details in config files and in our code.
+    The training log and model checkpoints will be saved under `output/dff_deeplab/cityscapes/`.
+
+
+## Usage
+
+1. All of our experiment settings (GPU ids, dataset config, training config, etc.) are specified in yaml config files at folder `./experiments/{deeplab,dff_deeplab}/cfgs`.
+
+2. Please refer to our code and config files for more details.
 
 
 ## Misc.
 
-Code has been tested under:
+Accel was tested on:
+
+- Ubuntu 16.04 with 1,8 Nvidia Tesla K80 GPUs
+
+[Deep Feature Flow](https://github.com/msracver/Deep-Feature-Flow#misc) was tested on:
 
 - Ubuntu 14.04 with a Maxwell Titan X GPU and Intel Xeon CPU E5-2620 v2 @ 2.10GHz
 - Windows Server 2012 R2 with 8 K40 GPUs and Intel Xeon CPU E5-2650 v2 @ 2.60GHz

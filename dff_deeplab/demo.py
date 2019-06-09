@@ -137,17 +137,19 @@ def main():
     key_sym = sym_instance.get_key_test_symbol(config)
     cur_sym = sym_instance.get_cur_test_symbol(config)
 
-    path_train_data = '/city/'
-    path_train_labels = '/ebs/Deep-Feature-Flow/data/cityscapes/'
+    path_demo_data = '/ebs/Accel/data/cityscapes/'
+    path_demo_labels = '/ebs/Accel/data/cityscapes/'
+    if path_demo_data == '' or path_demo_labels == '':
+        raise ValueError("Must set path to demo data + labels")
 
     # load demo data
-    image_names  = sorted(glob.glob(path_train_data + 'leftImg8bit_sequence/val/frankfurt/*.png'))
-    image_names += sorted(glob.glob(path_train_data + 'leftImg8bit_sequence/val/lindau/*.png'))
-    image_names += sorted(glob.glob(path_train_data + 'leftImg8bit_sequence/val/munster/*.png'))
+    image_names  = sorted(glob.glob(path_demo_data + 'leftImg8bit_sequence/val/frankfurt/*.png'))
+    image_names += sorted(glob.glob(path_demo_data + 'leftImg8bit_sequence/val/lindau/*.png'))
+    image_names += sorted(glob.glob(path_demo_data + 'leftImg8bit_sequence/val/munster/*.png'))
     image_names = image_names[: snip_len * num_ex]
-    label_files  = sorted(glob.glob(path_train_labels + 'gtFine/val/frankfurt/*trainIds.png'))
-    label_files += sorted(glob.glob(path_train_labels + 'gtFine/val/lindau/*trainIds.png'))
-    label_files += sorted(glob.glob(path_train_labels + 'gtFine/val/munster/*trainIds.png'))
+    label_files  = sorted(glob.glob(path_demo_labels + 'gtFine/val/frankfurt/*trainIds.png'))
+    label_files += sorted(glob.glob(path_demo_labels + 'gtFine/val/lindau/*trainIds.png'))
+    label_files += sorted(glob.glob(path_demo_labels + 'gtFine/val/munster/*trainIds.png'))
     output_dir = cur_path + '/../demo/deeplab_dff/'
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
