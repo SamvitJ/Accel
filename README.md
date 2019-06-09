@@ -7,7 +7,7 @@
 
 Some notes:
 
-* Accel combines optical-flow based keyframe feature warping (Deep Feature Flow) with per-frame temporal correction (DeepLab) in a score fusion step to improve on the accuracy of each of its constituent sub-networks.
+* Accel combines optical flow-based keyframe feature warping (Deep Feature Flow) with per-frame temporal correction (DeepLab) in a score fusion step to improve on the accuracy of each of its constituent sub-networks.
 * Accel is trained end-to-end on the task of video semantic segmentation.
 * Accel can be built with a range of feature sub-networks, from ResNet-18 to ResNet-101. Accel based on ResNet-18 (Accel-18) is fast and reasonably accurate. Accel based on ResNet-101 (Accel-101) exceeds state-of-the-accuracy.
 * Accel can be evaluated on sparsely annotated video recognition datasets, such as Cityscapes and CamVid.
@@ -131,7 +131,7 @@ git clone https://github.com/SamvitJ/Accel.git
 
 1. Please download the [Cityscapes dataset](https://www.cityscapes-dataset.com/login/). Specifically, make sure to download the [leftImg8bit_sequence_trainvaltest.zip](https://www.cityscapes-dataset.com/file-handling/?packageID=14) package (324GB), which contains 30-frame snippets for each Cityscapes train / val / test example. This is a requirement for testing at keyframe intervals > 1.
 
-	In addition, download [gtFine_trainvaltest.zip](https://www.cityscapes-dataset.com/file-handling/?packageID=1) (241MB) for the ground truth annotations.
+	In addition, download [gtFine_trainvaltest.zip](https://www.cityscapes-dataset.com/file-handling/?packageID=1) (241MB), which contains ground truth annotations.
 
 	Place the data in the `data` folder under the root directory:
 	```
