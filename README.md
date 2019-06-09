@@ -194,14 +194,17 @@ git clone https://github.com/SamvitJ/Accel.git
 	./model/pretrained/deeplab-101-0000.params
 	```
 
-2. Edit the file `experiments/dff_deeplab/cfgs/resnet_v1_101_flownet_cityscapes_deeplab_end2end_ohem.yaml` to specify the GPU ids available for training on your machine. For example, if you are testing on p2.8xlarge (an Amazon EC2 instance with 8 GPUs), set:
+2. Identify the config file for the model you wish to train. The config files are located under the directory `experiments/dff_deeplab/cfgs/`, and contain the experiment blueprints for training particular models (e.g. Accel-18) on particular datasets (e.g. Cityscapes).
+
+3. Edit the appropriate config file (e.g. `accel_18_cityscapes_end2end_ohem.yaml`) to specify the GPU ids available for training on your machine. For example, if you are testing on p2.8xlarge (an Amazon EC2 instance with 8 GPUs), set:
 	```
 	gpus: '0,1,2,3,4,5,6,7'
 	```
 
-3. To train Accel, use the following command. The default configuration is to train Accel-18, with preloaded weights from the base DFF and DeepLab-18 models.
+4. To train Accel, use the following command. For example, to train Accel-18 on Cityscapes, run:
     ```
-    python experiments/dff_deeplab/dff_deeplab_end2end_train_test.py --cfg experiments/dff_deeplab/cfgs/resnet_v1_101_flownet_cityscapes_deeplab_end2end_ohem.yaml
+    python experiments/dff_deeplab/dff_deeplab_end2end_train_test.py \
+    	--cfg experiments/dff_deeplab/cfgs/accel_18_cityscapes_end2end_ohem.yaml
     ```
     The training log and model checkpoints will be saved under `output/dff_deeplab/cityscapes/`.
 
