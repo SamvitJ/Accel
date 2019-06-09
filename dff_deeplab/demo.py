@@ -130,7 +130,7 @@ def main():
 
     # get symbol
     pprint.pprint(config)
-    config.symbol = 'resnet_v1_101_flownet_deeplab'
+    config.symbol = 'accel_18'
     model1 = '/../model/rfcn_dff_flownet_vid'
     model2 = '/../model/accel-18'
     sym_instance = eval(config.symbol + '.' + config.symbol)()

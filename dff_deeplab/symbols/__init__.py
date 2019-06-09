@@ -1,1 +1,1 @@
-import resnet_v1_101_flownet_deeplab
+import accel_18
