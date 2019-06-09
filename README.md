@@ -196,7 +196,7 @@ git clone https://github.com/SamvitJ/Accel.git
 
 2. Identify the config file for the model you wish to train. The config files are located under the directory `experiments/dff_deeplab/cfgs/`, and contain the experiment blueprints for training particular models (e.g. Accel-18) on particular datasets (e.g. Cityscapes).
 
-3. Edit the appropriate config file (e.g. `accel_18_cityscapes_end2end_ohem.yaml`) to specify the GPU ids available for training on your machine. For example, if you are testing on p2.8xlarge (an Amazon EC2 instance with 8 GPUs), set:
+3. Edit the appropriate config file (e.g. `accel_18_cityscapes_end2end_ohem.yaml`) to specify the GPU ids available for training on your machine. For example, if you are training on p2.8xlarge (an Amazon EC2 instance with 8 GPUs), set:
 	```
 	gpus: '0,1,2,3,4,5,6,7'
 	```
