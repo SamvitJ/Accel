@@ -1,7 +1,7 @@
 ---
 MXNET_VERSION: "mxnet"
 output_path: "./output/dff_deeplab/cityscapes"
-symbol: accel_34
+symbol: accel_101
 gpus: '0'
 SCALES:
 - 1024
@@ -12,7 +12,7 @@ default:
 network:
   pretrained: "./model/rfcn_dff_flownet_vid"
   pretrained_flow: "./model/pretrained/deeplab-101"
-  pretrained_ec: "./model/pretrained/deeplab-34"
+  pretrained_ec: "./model/pretrained/deeplab-101"
   pretrained_epoch: 0
   PIXEL_MEANS:
   - 103.06
@@ -37,8 +37,10 @@ network:
   - fc6
   - score
   - upsampling
-  # res-34
-  - "34_"
+  # curr
+  - curr_fc6
+  - curr_score
+  - curr_upsampling
   # flow
   - ReLU
   - flow_conv1
@@ -77,16 +79,16 @@ TRAIN:
   # typically we will use 4000 warmup step for single GPU
   warmup_step: 1000
   begin_epoch: 0
-  end_epoch: 53
+  end_epoch: 100
   lr: 0.0005
-  lr_step: '53'
+  lr_step: '100'
   model_prefix: "dff_deeplab_vid"
-  arg_prefix: "34_"
+  arg_prefix: "101_"
   # whether flip image
   FLIP: false
   # size of images for each device
   BATCH_IMAGES: 1
-  KEY_INTERVAL: 4
+  KEY_INTERVAL: 3
   # e2e changes behavior of anchor loader and metric
   END2END: true
   # wheter crop image during training
