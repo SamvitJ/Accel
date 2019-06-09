@@ -40,10 +40,9 @@ ref_pred_prefix = 'seg_frankfurt_000000_012000'
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Show Deep Feature Flow demo')
+    parser.add_argument('-v', '--version', type=int, default=18)
     parser.add_argument('-i', '--interval', type=int, default=1)
     parser.add_argument('-e', '--num_ex', type=int, default=10)
-    parser.add_argument('-m', '--model_num', type=int, default=0)
-    parser.add_argument('-mname', '--model_name', type=str, default='')
     parser.add_argument('--avg', dest='avg_acc', action='store_true')
     parser.set_defaults(avg_acc=False)
     args = parser.parse_args()
@@ -122,17 +121,24 @@ def main():
     # settings
     num_classes = 19
     snip_len = 30
+    version = str(args.version)
     interv = args.interval
     num_ex = args.num_ex
-    model_num = args.model_num
-    model_name = args.model_name
     avg_acc = args.avg_acc
+
+    # validate params
+    if version not in ['18', '34', '50', '101']:
+        raise ValueError("Invalid Accel version '%s' - must be one of Accel-{18,34,50,101}" % version)
+    if interv < 1:
+        raise ValueError("Invalid interval %d - must be >=1" % interv)
+    if num_ex < 1:
+        raise ValueError("Invalid num_ex %d - must be >=1" % num_ex)
 
     # get symbol
     pprint.pprint(config)
-    config.symbol = 'accel_18'
+    config.symbol = 'accel_' + version
     model1 = '/../model/rfcn_dff_flownet_vid'
-    model2 = '/../model/accel-18'
+    model2 = '/../model/accel-' + version
     sym_instance = eval(config.symbol + '.' + config.symbol)()
     key_sym = sym_instance.get_key_test_symbol(config)
     cur_sym = sym_instance.get_cur_test_symbol(config)
@@ -196,7 +202,7 @@ def main():
     provide_label = [None for i in xrange(len(data))]
 
     arg_params, aux_params = load_param(cur_path + model1, 0, process=True)
-    arg_params_dcn, aux_params_dcn = load_param(cur_path + model2, model_num, process=True)
+    arg_params_dcn, aux_params_dcn = load_param(cur_path + model2, 0, process=True)
     arg_params.update(arg_params_dcn)
     aux_params.update(aux_params_dcn)
     key_predictor = Predictor(key_sym, data_names, label_names,

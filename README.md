@@ -166,15 +166,15 @@ git clone https://github.com/SamvitJ/Accel.git
     path_demo_labels = '/ebs/Accel/data/cityscapes/'
 	```
 
-3. Run the following commands to evaluate Accel-18 on the Cityscapes val data.
+3. Run one of the following commands to evaluate Accel-x on the Cityscapes val data.
 
-   Default setting (keyframe interval 1, num examples 10):
+   Default setting (Accel version 18, keyframe interval 1, num examples 10):
 	```
 	python ./dff_deeplab/demo.py
 	```
-   Custom setting (keyframe interval X, num examples Y):
+   Custom setting (Accel version X, keyframe interval Y, num examples Z):
 	```
-	python ./dff_deeplab/demo.py --interval 5 --num_ex 100
+	python ./dff_deeplab/demo.py --version 50 --interval 5 --num_ex 100
 	```
    See `dff_deeplab/demo.py` for other configurable runtime settings.
 
