@@ -86,7 +86,7 @@ TRAIN:
   FLIP: false
   # size of images for each device
   BATCH_IMAGES: 1
-  KEY_INTERVAL: 3
+  KEY_INTERVAL: 5
   # e2e changes behavior of anchor loader and metric
   END2END: true
   # wheter crop image during training
