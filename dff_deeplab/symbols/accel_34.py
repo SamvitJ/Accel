@@ -2,7 +2,7 @@
 # Accel
 # Copyright (c) 2019
 # Licensed under the MIT License [see LICENSE for details]
-# Written by Samvit Jain
+# Modified by Samvit Jain
 # --------------------------------------------------------
 
 import cPickle

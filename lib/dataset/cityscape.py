@@ -1,9 +1,8 @@
 # --------------------------------------------------------
-# Deformable Convolutional Networks
-# Copyright (c) 2016 by Contributors
-# Copyright (c) 2017 Microsoft
-# Licensed under The Apache-2.0 License [see LICENSE for details]
-# Written by Zheng Zhang
+# Accel
+# Copyright (c) 2019
+# Licensed under the MIT License [see LICENSE for details]
+# Modified by Samvit Jain
 # --------------------------------------------------------
 
 import cPickle

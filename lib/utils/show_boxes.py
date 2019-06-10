@@ -1,8 +1,8 @@
 # --------------------------------------------------------
-# Deep Feature Flow
-# Copyright (c) 2017 Microsoft
-# Licensed under The Apache-2.0 License [see LICENSE for details]
-# Written by Yi Li, Haocheng Zhang, Xizhou Zhu
+# Accel
+# Copyright (c) 2019
+# Licensed under the MIT License [see LICENSE for details]
+# Modified by Samvit Jain
 # --------------------------------------------------------
 
 import matplotlib.pyplot as plt

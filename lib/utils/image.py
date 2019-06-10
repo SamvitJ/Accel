@@ -1,3 +1,10 @@
+# --------------------------------------------------------
+# Accel
+# Copyright (c) 2019
+# Licensed under the MIT License [see LICENSE for details]
+# Modified by Samvit Jain
+# --------------------------------------------------------
+
 import numpy as np
 import os
 import cv2
