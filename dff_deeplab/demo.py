@@ -35,9 +35,6 @@ from utils.show_boxes import show_boxes, draw_boxes
 from utils.tictoc import tic, toc
 from nms.nms import py_nms_wrapper, cpu_nms_wrapper, gpu_nms_wrapper
 
-ref_img_prefix = 'frankfurt_000000_000294'
-ref_pred_prefix = 'seg_frankfurt_000000_012000'
-
 def parse_args():
     parser = argparse.ArgumentParser(description='Show Deep Feature Flow demo')
     parser.add_argument('-v', '--version', type=int, default=18)
@@ -57,15 +54,6 @@ def fast_hist(pred, label, n):
 
 def per_class_iu(hist):
     return np.true_divide(np.diag(hist), (hist.sum(1) + hist.sum(0) - np.diag(hist)))
-
-def get_label_if_available(label_files, im_filename):
-    for lb_file in label_files:
-        _, lb_filename = os.path.split(lb_file)
-        lb_filename = lb_filename[:len(ref_img_prefix)]
-        if im_filename.startswith(lb_filename):
-            print 'label {}'.format(lb_filename)
-            return lb_file
-    return None
 
 def getpallete(num_cls):
     """
