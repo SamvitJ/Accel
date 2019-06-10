@@ -11,7 +11,7 @@ default:
   kvstore: device
 network:
   pretrained: "./model/rfcn_dff_flownet_vid"
-  pretrained_flow: "./model/pretrained/deeplab-101"
+  pretrained_base: "./model/pretrained/deeplab-101"
   pretrained_ec: "./model/pretrained/deeplab-18"
   pretrained_epoch: 0
   PIXEL_MEANS:
